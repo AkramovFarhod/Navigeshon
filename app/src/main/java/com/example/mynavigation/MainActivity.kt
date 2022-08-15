@@ -30,7 +30,26 @@ class MainActivity : ComponentActivity() {
                 // handle location update
             } else {
                 ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_CODE_FOREGROUND)
+                    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), RESULT_FIRST_USER)
+            }
+
+            val hasForegroundLocationPermission = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+
+            if (hasForegroundLocationPermission) {
+                val hasBackgroundLocationPermission = ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
+
+                if (hasBackgroundLocationPermission) {
+                    // handle location update
+                } else {
+                    ActivityCompat.requestPermissions(this,
+                        arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION), RESULT_CANCELED)
+                }
+            } else {
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_BACKGROUND_LOCATION), RESULT_CANCELED)
             }
 
 
